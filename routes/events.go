@@ -45,7 +45,7 @@ func postEvent(context *gin.Context) {
 		return
 	}
 
-	err := utils.VerifyToken(token)
+	userId, err := utils.VerifyToken(token)
 	if err != nil {
 		fmt.Println(err)
 		context.JSON(http.StatusUnauthorized, gin.H{"Message": "Not authorized "})
@@ -61,7 +61,7 @@ func postEvent(context *gin.Context) {
 		return
 	}
 
-	event.ID = 1
+	event.UserID = userId
 	event.UserID = 1
 
 	err = event.Save()
