@@ -1,5 +1,6 @@
-PUT http://localhost:8080/events/2
+PUT http://localhost:8080/events/7
 content-type: application/json 
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiZXhwIjoxNzQxODkxOTU4LCJ1c2VySWQiOjF9.57sRu8W-_8Xm4EQ3nd4jNQy64s81UCz91_3pMyaoz3g
 
 {
     "title":"updated title",

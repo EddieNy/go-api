@@ -1,9 +1,9 @@
 POST http://localhost:8080/events
 content-type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQGdtYWlsLmNvbSIsImV4cCI6MTc0MTgwNTAxMSwidXNlcklkIjoyfQ.Qf0mjoUfBDIMJzLiP24QYfrwT6wHRe_cJ2r-503ue3I
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQGdtYWlsLmNvbSIsImV4cCI6MTc0MTg5MzAwOSwidXNlcklkIjoyfQ.bHVK-ZkNU7Bt9nVSC3nHX-qwm70Z1-PfC0hZvrkEIw0
 
 {
-    "title":"event",
+    "title":"events",
     "description":"Just a test",
     "location": "Test site",
     "datetime": "2025-03-05T20:31:37Z"

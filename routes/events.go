@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"example.com/rest-api/models"
-	"example.com/rest-api/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,31 +37,17 @@ func getEvent(context *gin.Context) {
 }
 
 func postEvent(context *gin.Context) {
-	token := context.Request.Header.Get("Authorization")
-
-	if token == "" {
-		context.JSON(http.StatusUnauthorized, gin.H{"Message": "Not authorized to create event!"})
-		return
-	}
-
-	userId, err := utils.VerifyToken(token)
-	if err != nil {
-		fmt.Println(err)
-		context.JSON(http.StatusUnauthorized, gin.H{"Message": "Not authorized "})
-		return
-	}
 
 	var event models.Event
-	err = context.ShouldBindJSON(&event)
+	err := context.ShouldBindJSON(&event)
 
 	if err != nil {
 		fmt.Println(err)
 		context.JSON(http.StatusBadRequest, gin.H{"Message": "Could not parse request data"})
 		return
 	}
-
+	userId := context.GetInt64("userId")
 	event.UserID = userId
-	event.UserID = 1
 
 	err = event.Save()
 
@@ -79,14 +64,18 @@ func updateEvent(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"Message": "Could not parse event id"})
 		return
 	}
-
-	_, err = models.GetEventByID(eventId)
+	userId := context.GetInt64("userId")
+	event, err := models.GetEventByID(eventId)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"Message": "could not fetch the event"})
 		return
 	}
 
+	if event.UserID != userId {
+		context.JSON(http.StatusUnauthorized, gin.H{"Message": "Not authorized to update event"})
+		return
+	}
 	var updatedEvent models.Event
 	err = context.ShouldBindJSON(&updatedEvent)
 	if err != nil {
@@ -111,10 +100,16 @@ func deleteEvent(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"Message": "Could not parse event id"})
 		return
 	}
+	userId := context.GetInt64("userId")
 	event, err := models.GetEventByID(eventId)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"Message": "Could not fetch the event"})
+		return
+	}
+
+	if event.UserID != userId {
+		context.JSON(http.StatusUnauthorized, gin.H{"Message": "Not authorized to delete this event!"})
 		return
 	}
 
